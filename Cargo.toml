@@ -1,0 +1,17 @@
+[package]
+name = "tree-sitter-query-reverser"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "tsqr"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.5.20", features = ["derive"] }
+color-eyre = "0.6.3"
+tree-sitter = "0.24"
+tree-sitter-query = { git = "https://github.com/tree-sitter-grammars/tree-sitter-query", version = "0.4.0", branch = "update" }
+
+[build-dependencies]
+cc="*"
