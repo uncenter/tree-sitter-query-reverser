@@ -20,20 +20,14 @@ fn main() -> Result<()> {
         .expect("Error loading Query grammar");
 
     let source_code = fs::read_to_string(args.path)?;
+
     let tree = parser.parse(&source_code, None).unwrap();
     let root_node = tree.root_node();
-
     let mut cursor = root_node.walk();
 
     let mut nodes = root_node
         .children(&mut cursor)
         .into_iter()
-        .collect::<Vec<_>>();
-
-    nodes.reverse();
-
-    let reversed_code = nodes
-        .iter()
         .filter_map(|n| {
             if n.kind() == "comment" {
                 None
@@ -43,8 +37,11 @@ fn main() -> Result<()> {
                 Some(&source_code[range.start..range.end])
             }
         })
-        .collect::<Vec<_>>()
-        .join("\n");
+        .collect::<Vec<_>>();
+
+    nodes.reverse();
+
+    let reversed_code = nodes.join("\n");
 
     if let Some(outpath) = args.output {
         fs::write(outpath, reversed_code)?;
